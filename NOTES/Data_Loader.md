@@ -227,26 +227,19 @@ Useful when caching:
 
 ```mermaid
 flowchart LR
+    subgraph Optimized
+        A["Insert"]
+        B["RAM Journal"]
+        C["SQLite Database"]
+        A --> B --> C
+    end
 
-Insert
-
--->RAM Journal
-
--->Database
-```
-
-instead of
-
-```text
-Insert
-
-↓
-
-SSD Journal
-
-↓
-
-SSD Database
+    subgraph Traditional
+        D["Insert"]
+        E["SSD Journal"]
+        F["SQLite Database"]
+        D --> E --> F
+    end
 ```
 
 ---
@@ -293,9 +286,23 @@ Binary Blob
 ```
 
 instead of
+```mermaid
+flowchart TB
 
-```
-Python List
+subgraph Old_Method
+    A["512-D Vector"]
+    B["Python List"]
+    C["Arrow Nested List"]
+    D["Large Parquet"]
+    A --> B --> C --> D
+end
+
+subgraph New_Method
+    E["512-D Vector"]
+    F["Binary Blob"]
+    G["Compact Parquet"]
+    E --> F --> G
+end
 ```
 
 ---
@@ -443,15 +450,13 @@ Immediately after:
 ```mermaid
 flowchart LR
 
-Batch
+A["Load Batch"]
+B["Generate Embeddings"]
+C["Save Results"]
+D["Free RAM"]
+E["Load Next Batch"]
 
--->Inference
-
--->Write
-
--->Clear Memory
-
--->Next Batch
+A --> B --> C --> D --> E
 ```
 
 ---
@@ -484,8 +489,16 @@ Without validation, the pipeline crashes later.
 
 ## How?
 
-```python
-img.load()
+```mermaid
+flowchart LR
+
+A["Download Image"]
+B["Open Image"]
+C["img.load() Validation"]
+D["Resize"]
+E["CLIP Encoder"]
+
+A --> B --> C --> D --> E
 ```
 
 This forces Pillow to:
@@ -562,29 +575,29 @@ Invalid images exit the pipeline before expensive GPU inference.
 ```mermaid
 flowchart TD
 
-A[CSV]
+A["CSV File"]
+B["Chunk Reader"]
+C["Download Images"]
+D["Validate Images"]
+E["Image Preprocessing"]
+F["CLIP Encoder"]
+G["Convert to Binary Blob"]
+H["Write Parquet"]
+I["Update SQLite Cache"]
+J["Clear Batch Memory"]
+K["Next Chunk"]
 
--->B[Chunk Reader]
-
--->C[Download Image]
-
--->D[img.load Validation]
-
--->E[Preprocessing]
-
--->F[CLIP Embedding]
-
--->G[Binary Blob]
-
--->H[Parquet]
-
-H-->I[SQLite Cache]
-
-I-->J[Clear Batch]
-
-J-->K[Next Chunk]
+A --> B
+B --> C
+C --> D
+D --> E
+E --> F
+F --> G
+G --> H
+H --> I
+I --> J
+J --> K
 ```
-
 ---
 
 # Summary
