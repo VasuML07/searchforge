@@ -6,7 +6,7 @@
 
 <p align="center">
 
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.10.11+-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=for-the-badge\&logo=pytorch\&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Production-009688?style=for-the-badge\&logo=fastapi\&logoColor=white)
 ![Qdrant](https://img.shields.io/badge/Qdrant-Vector_DB-DC244C?style=for-the-badge)
